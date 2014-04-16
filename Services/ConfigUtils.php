@@ -9,6 +9,9 @@ class ConfigUtils {
 
 	public static function loadConfig($fileName, $configDirectories = array('app/config'))
 	{
+		if (!is_array($configDirectories))
+			$configDirectories = array($configDirectories);
+
 		$locator = new FileLocator($configDirectories);
 		return $locator->locate($fileName);
 	}
