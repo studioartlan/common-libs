@@ -7,18 +7,27 @@ use Symfony\Component\Yaml\Yaml;
 
 class ConfigUtils {
 
-	public static function loadConfig($fileName, $configDirectories = array('app/config'))
-	{
-		if (!is_array($configDirectories))
-			$configDirectories = array($configDirectories);
+    public function __construct(\AppKernel $kernel)
+    {
+        $this->kernel = $kernel;
+    }
 
-		$locator = new FileLocator($configDirectories);
-		return $locator->locate($fileName);
+	public function getConfigFile($fileName)
+	{
+		return $this->kernel->getContainer()->get('file_locator')->locate($fileName, $this->kernel->getRootDir() . '/config');
+	}
+
+	public function getConfigResource($fileName)
+	{
+		return $this->kernel->locateResource($fileName);
 	}
 	
-	public static function yamlParse($fileName)
+	public function yamlParse($fileName)
 	{
-		return Yaml::parse(self::loadConfig($fileName));
+		if (strpos($fileName, '@') === 0)
+			return Yaml::parse($this->getConfigResource($fileName));
+		else
+			return Yaml::parse($this->getConfigFile($fileName));
 	}
 
 }

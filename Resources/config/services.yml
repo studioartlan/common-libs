@@ -1,0 +1,7 @@
+services:
+    studioartlan.file_utils:
+        class: StudioArtlan\CommonLibsBundle\Services\FileUtils
+
+    studioartlan.config_utils:
+        class: StudioArtlan\CommonLibsBundle\Services\ConfigUtils
+        arguments: ["@kernel"]
